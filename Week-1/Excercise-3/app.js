@@ -1,12 +1,29 @@
 const fs = require('fs');
+const path = require('path');
 
-fs.readFile('./numbers.txt', (err, data) => {
-  console.log('file data -> ', data.toString());
-  if (err) console.log(err);
-});
+const filePath = path.join(__dirname, './numbers.txt');
 
-// output : 1,2,3,4,5,6
+const readFile = (doWrite, message) => {
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) console.log(err);
+    else {
+      console.log(message, data.toString());
+      doWrite && writeFile();
+    }
+  });
+};
 
-fs.writeFile('./numbers.txt', '100,200,300,400', (err) => {
-  if (err) console.log(err);
-});
+const writeFile = () => {
+  fs.writeFile(filePath, 'Original Content of the file Hello, Node!', (err) => {
+    if (err) console.log(err);
+    else {
+      readFile(false, 'after appending');
+    }
+  });
+};
+
+const fileOperation = () => {
+  readFile(true, 'before appending');
+};
+
+fileOperation();
